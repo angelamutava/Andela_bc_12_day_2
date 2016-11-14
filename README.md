@@ -29,9 +29,12 @@ To get started with the API:
 * create a twitter account.
 * login to the account.
 *Get the api keys and the tokens respectively.<br/>
+
+
 The above credentials will be needed in the twitter.py file.<br/>
-To install the tweepy library to your virtual environment
-####Run the command
+To install the tweepy library to your virtual environment.<br/>
+
+######Run the command
 ```
 pip install tweepy
 ```  
