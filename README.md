@@ -23,8 +23,32 @@ print word_count("angela angela mutava")
 {"angela":2, "mutava":1}
 
 ```
-##Google Drive API v2
-This is a simple command line application that takes advantage of the drive API to list down the files stored in your google drive.It is a guide from online tutorials.You can gain a glimpse of the same from youtube tutorials by a google developer from the link https://www.youtube.com/watch?v=Z5G0luBohCg&feature=youtu.be&list=PLOU2XLYxmsILOIxBRPPhgYbuSslr50KVq&index=4
+##Twitter Streaming API and the Tweepy library
+This is a simple command line application that takes advantage of the Twitter streaming API to get tweets with the keyword andela,python and bootcamp.
+To get started with the API:
+Markup : * create a twitter account.
+         * login to the account.
+         *Get the api keys and the tokens respectively.
+The above credentials will be needed in the twitter.py file.
+To install the tweepy library to your virtual environment
+####Run the command
+```
+pip install tweepy
+```  
+You can as well clone the repository 
+######clone
+```
+$ git  clone https://github.com/anonymousme/Andela_bc_12_day_2
+```  
+Run the tweet.py file with the command below.It will generate some tweets on the command line.To store the tweets in a txt file run the command.
+```
+python tweet.py
+```
+```
+python tweet.py > tweets.txt
+```      
+
+
 
 ##Guide
 To gain practical experience of how the functions work you can clone the repository. With python installed in your machine navigate to the appropriate folder on command line and run python filename e.g word_count.py
