@@ -26,7 +26,7 @@ print word_count("angela angela mutava")
 ##Twitter Streaming API and the Tweepy library
 This is a simple command line application that takes advantage of the Twitter streaming API to get tweets with the keyword andela,python and bootcamp.
 To get started with the API:
-Markup : * create a twitter account.
+         * create a twitter account.
          * login to the account.
          *Get the api keys and the tokens respectively.
 The above credentials will be needed in the twitter.py file.
