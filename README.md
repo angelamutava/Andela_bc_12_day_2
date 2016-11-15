@@ -33,6 +33,13 @@ To get started with the API:
 
 The above credentials will be needed in the twitter.py file.<br/>
 To install the tweepy library to your virtual environment.<br/>
+######Requirements for the virtual env include
+*oauthlib==2.0.0
+*requests==2.11.1
+*requests-oauthlib==0.7.0
+*six==1.10.0
+*tweepy==3.5.0
+
 
 ######Run the command
 ```
