@@ -1,33 +1,86 @@
-#Import the necessary methods from tweepy library
-from tweepy.streaming import StreamListener
-from tweepy import OAuthHandler
+import tweepy
 from tweepy import Stream
+from tweepy import OAuthHandler
+from tweepy.streaming import StreamListener
+import time
+import argparse
+import string
+import config
+import json
 
-#Variables that contains the user credentials to access Twitter API 
-access_token = "715507251373555716-D9M6UiJf8mnxA0My37Zx5FxpQ0NKftg"
-access_token_secret = "L7UFMQmtAw3cNI3kmOsRsaHIYGd2qKKhmV0PAgaprhMom "
-consumer_key = "E2tKHjdRbfA3RyRCNXd4YMOTD"
-consumer_secret = "mygvV8LsFZgwAgye6ZpqNpQ5fHBOo1vOd9Q6iaLDczROC760jd "
+def get_parser():
+    """Get parser for command line arguments."""
+    parser = argparse.ArgumentParser(description="Twitter Downloader")
+    parser.add_argument("-q",
+                        "--query",
+                        dest="query",
+                        help="Query/Filter",
+                        default='-')
+    parser.add_argument("-d",
+                        "--data-dir",
+                        dest="data_dir",
+                        help="Output/Data Directory")
+    return parser
 
 
-#This is a basic listener that just prints received tweets to stdout.
-class StdOutListener(StreamListener):
+class MyListener(StreamListener):
+    """Custom StreamListener for streaming data."""
+
+    def __init__(self, data_dir, query):
+        query_fname = format_filename(query)
+        self.outfile = "%s/stream_%s.json" % (data_dir, query_fname)
 
     def on_data(self, data):
-        print data
+        try:
+            with open(self.outfile, 'a') as f:
+                f.write(data)
+                print(data)
+                return True
+        except BaseException as e:
+            print("Error on_data: %s" % str(e))
+            time.sleep(5)
         return True
 
     def on_error(self, status):
-        print status
+        print(status)
+        return True
 
+
+def format_filename(fname):
+    """Convert file name into a safe string.
+    Arguments:
+        fname -- the file name to convert
+    Return:
+        String -- converted file name
+    """
+    return ''.join(convert_valid(one_char) for one_char in fname)
+
+
+def convert_valid(one_char):
+    """Convert a character into '_' if invalid.
+    Arguments:
+        one_char -- the char to convert
+    Return:
+        Character -- converted char
+    """
+    valid_chars = "-_.%s%s" % (string.ascii_letters, string.digits)
+    if one_char in valid_chars:
+        return one_char
+    else:
+        return '_'
+
+@classmethod
+def parse(cls, api, raw):
+    status = cls.first_parse(api, raw)
+    setattr(status, 'json', json.dumps(raw))
+    return status
 
 if __name__ == '__main__':
+    parser = get_parser()
+    args = parser.parse_args()
+    auth = OAuthHandler(config.consumer_key, config.consumer_secret)
+    auth.set_access_token(config.access_token, config.access_secret)
+    api = tweepy.API(auth)
 
-    #This handles Twitter authentication and the connection to Twitter Streaming API
-    l = StdOutListener()
-    auth = OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_token, access_token_secret)
-    stream = Stream(auth, l)
-
-    #This line filter Twitter Streams to capture data by the keywords: 'python', 'andela', 'bootcamp'
-    stream.filter(track=['python', 'andela', 'bootcamp'])
+    twitter_stream = Stream(auth, MyListener(args.data_dir, args.query))
+twitter_stream.filter(track=[args.query])
